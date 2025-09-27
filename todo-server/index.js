@@ -12,7 +12,7 @@ app.use(express.json());
 // mongodb uri
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uuac6m8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -30,10 +30,22 @@ async function run() {
     await client.connect();
     const todoCollection = client.db('todo-app').collection('add-todo');
 
-    app.post('/add-todo', async(req, res) => {
-        const data = req.body;
-        const result = await todoCollection.insertOne(data);
-        res.send(result);
+    app.post('/add-todo', async (req, res) => {
+      const data = req.body;
+      const result = await todoCollection.insertOne(data);
+      res.send(result);
+    })
+    // get from db
+    app.get('/add-todo', async (req, res) => {
+      const result = await todoCollection.find().toArray();
+      res.send(result);
+    });
+    // delete single todo in db
+    app.delete('/delete/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await todoCollection.deleteOne(query);
+      res.send(result);
     })
 
 
@@ -49,9 +61,9 @@ run().catch(console.dir);
 
 // basic setup
 app.get('/', async (req, res) => {
-    const app = "task server is running";
-    res.send(app);
+  const app = "task server is running";
+  res.send(app);
 });
 app.listen(port, async (req, res) => {
-    console.log(`server is running on ${port}`);
+  console.log(`server is running on ${port}`);
 })

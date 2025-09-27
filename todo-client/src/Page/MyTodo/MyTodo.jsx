@@ -3,14 +3,48 @@ import axios from "axios";
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
 import { IoCheckmarkDone } from "react-icons/io5";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { GoTrash } from "react-icons/go";
+import toast from "react-hot-toast";
 
 const MyTodo = () => {
-    const [data: todo, isLoading, refetch] = useQuery({
+    const { data: todo = [], refetch } = useQuery({
         queryKey: ['todo'],
         queryFn: async () => {
-            const {data} = await axios.get('/')
+            const { data } = await axios.get(`${import.meta.env.VITE_API}/add-todo`);
+            refetch();
+            return data;
         }
     })
+    console.log(todo);
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${import.meta.env.VITE_API}/delete/${id}`);
+            toast.success('Delete Todo Successful!!')
+            refetch();
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.message || error.message || "Something went wrong!");
+        }
+    }
+    const mordernDelete = (id) => {
+        toast(
+            (t) => (
+                <div className='text-center space-y-3'>
+                    <div>
+                        <p>Are you want to <b>Deletes?</b> </p>
+                    </div>
+                    <div className='gap-3 flex justify-center'>
+                        <button className='bg-red-400 text-white cursor-pointer py-2 px-3 text-sm rounded-md font-semibold' onClick={() => {
+                            toast.dismiss(t.id)
+                            handleDelete(id)
+                        }
+                        }>Delete</button>
+                        <button className='bg-blue-400 text-white cursor-pointer py-2 px-3 text-sm rounded-md font-semibold' onClick={() => toast.dismiss(t.id)}>Close</button>
+                    </div>
+                </div>
+            )
+        );
+    }
     return (
         <div>
             <div className="p-8 w-11/12">
@@ -29,40 +63,44 @@ const MyTodo = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* row 1 */}
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>Blue</td>
-                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit</td>
-                                <td className='px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap'>
-                                    <div
-                                        className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2   
-                                        {role === "Moderator" && 'text-blue-500 bg-blue-100/60'} 
-                                        {role === "Admin" && 'text-green-500 bg-green-100/60'}`}
-                                    >
-                                        <span
-                                            className={`h-1.5 w-1.5 rounded-full 
-                                            {role === "Moderator" && 'bg-blue-500'} 
-                                            {role === "Admin" && 'bg-green-500'}`}
-                                        ></span>
-                                        <h2 className='text-sm font-normal '>Pending</h2>
-                                    </div>
-                                </td>
-                                <td className="flex gap-x-3">
-                                    <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-black bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
-                                        <IoCheckmarkDone className="text-lg" />
-                                    </button>
-                                    <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-black bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
-                                        <IoCloudUploadOutline className="text-[17px]" />
-                                    </button>
-                                    <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-black bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
-                                        <HiOutlineViewfinderCircle className="text-lg" />
-                                    </button>
-
-                                </td>
-                            </tr>
+                            {
+                                todo?.map((item, index) => <tr key={item?._id}>
+                                    <th>{index + 1}</th>
+                                    <td>{item?.title}</td>
+                                    <td>{item?.time}</td>
+                                    <td>{item?.items}</td>
+                                    <td>{item?.description}</td>
+                                    <td className='px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap'>
+                                        <div
+                                            className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2   
+                            ${item?.status === "Pending" && 'text-blue-500 bg-blue-100/60'} 
+                            ${item?.status === "Complete" && 'text-green-500 bg-green-100/60'} `}
+                                        >
+                                            <span
+                                                className={`h-1.5 w-1.5 rounded-full 
+                            ${item?.status === "Pending" && 'bg-blue-500'} 
+                            ${item?.status === "Complete" && 'bg-green-500'} 
+                        `}
+                                            ></span>
+                                            <h2 className='text-sm font-normal '>{item?.status}</h2>
+                                        </div>
+                                    </td>
+                                    <td className="flex gap-x-3">
+                                        <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-black bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
+                                            <IoCheckmarkDone className={`${item?.status === "Pending" && "text-lg"} ${item?.status === "Complete" && "text-lg text-blue-500"}`} />
+                                        </button>
+                                        <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-green-500 bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
+                                            <IoCloudUploadOutline className="text-[17px]" />
+                                        </button>
+                                        <button onClick={() => mordernDelete(item?._id)} type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-red-500 bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
+                                            <GoTrash className="text-[16px]" />
+                                        </button>
+                                        <button type='submit' className='btn btn-xs px-3 py-4 text-sm font-medium tracking-wide text-indigo-500 bg-transparent transition-colors duration-300 transform rounded-xl cursor-pointer'>
+                                            <HiOutlineViewfinderCircle className="text-lg" />
+                                        </button>
+                                    </td>
+                                </tr>)
+                            }
                         </tbody>
                     </table>
                 </div>

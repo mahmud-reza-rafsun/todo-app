@@ -7,10 +7,10 @@ const AddTodo = () => {
         e.preventDefault();
         const form = e.target;
         const title = form.title.value;
-        const date = form.date.value;
+        const time = form.time.value;
         const items = form.items.value;
         const description = form.description.value;
-        const formData = { title, date, items, description }
+        const formData = { title, time, items, description, status: "Pending" }
         console.log(formData);
 
         // set data to database
@@ -45,17 +45,17 @@ const AddTodo = () => {
                                     required
                                 />
                             </div>
-                            {/* date */}
+                            {/* time */}
                             <div className=''>
                                 <label
                                     className='block mb-2 text-sm font-medium text-gray-600'
                                     htmlFor='TodoTitle'
                                 >
-                                    Date & Time
+                                    Time
                                 </label>
                                 <input
-                                    name="date"
-                                    type="datetime-local"
+                                    name="time"
+                                    type="time"
                                     className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300"
                                 />
                             </div>

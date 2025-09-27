@@ -4,7 +4,7 @@ import { GoEye } from "react-icons/go";
 import { useState } from "react";
 import { GoEyeClosed } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
-import LoadingSpinner from "../../../components/Navbar/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
 const Login = () => {
     const { handleGoogleSignIn, loading, user } = useAuth();

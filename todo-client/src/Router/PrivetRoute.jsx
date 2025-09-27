@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import LoadingSpinner from "../components/Navbar/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+
 
 const PrivetRoute = ({ children }) => {
     const { loading, user } = useAuth();
