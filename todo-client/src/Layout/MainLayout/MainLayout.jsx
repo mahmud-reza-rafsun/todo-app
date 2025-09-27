@@ -9,7 +9,7 @@ const MainLayout = () => {
         <div>
              {!hideNavbar && <Navbar />}
             <div className="">
-                <Outlet />
+                <Outlet/>
             </div>
         </div>
     );

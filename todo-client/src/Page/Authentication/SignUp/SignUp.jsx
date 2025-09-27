@@ -1,20 +1,23 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import bgImg from '../../../assets/images/image.jpg'
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { AuthContext } from "../../../provider/AuthProvider/AuthProvider";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 
 const SignUp = () => {
-    const { handleGoogleSignIn } = useContext(AuthContext);
+    const { handleGoogleSignIn } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
     const handleSignUp = (e) => {
         e.preventDefault();
     }
     const handleGoogle = async () => {
         try {
-            await handleGoogleSignIn
+            await handleGoogleSignIn();
             toast.success('Google SignUp Successful!!!');
+            navigate('/')
         }
         catch (error) {
             toast.error(error.message);
@@ -32,7 +35,7 @@ const SignUp = () => {
                     <div className="flex flex-col lg:flex-row justify-center items-center gap-0 lg:gap-4">
                         <button
                             onClick={handleGoogle}
-                            className='flex w-full cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 '
+                            className='flex w-full cursor-pointer items-center justify-center mt-4 text-gray-600 border-gray-300 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 '
                         >
                             <div className='px-4 py-2'>
                                 <svg className='w-6 h-6' viewBox='0 0 40 40'>
@@ -83,7 +86,7 @@ const SignUp = () => {
                                     id='name'
                                     autoComplete='name'
                                     name='name'
-                                    className={`block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-blue-300`}
+                                    className={`block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-blue-300`}
                                     type='text'
                                     placeholder='Name'
                                     required
@@ -112,7 +115,7 @@ const SignUp = () => {
                                 id='LoggingEmailAddress'
                                 autoComplete='email'
                                 name='email'
-                                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-blue-300'
+                                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg border-gray-300 focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-blue-300'
                                 type='email'
                                 placeholder='Email Address'
                                 required
@@ -131,7 +134,7 @@ const SignUp = () => {
                                 id='loggingPassword'
                                 autoComplete='current-password'
                                 name='password'
-                                className={`block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-10 focus:outline-none focus:ring focus:ring-blue-300`}
+                                className={`block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10 focus:outline-none focus:ring focus:ring-blue-300`}
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder='Password'
                             />

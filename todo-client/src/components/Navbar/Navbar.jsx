@@ -1,10 +1,9 @@
-import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
 import { toast } from 'react-hot-toast'
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
-    const { handleSignOut } = useContext(AuthContext);
+    const { handleSignOut, user } = useAuth();
     const navigate = useNavigate();
     const handleLogOut = () => {
         try {
@@ -16,7 +15,7 @@ const Navbar = () => {
         }
     }
     return (
-        <div className="bg-base-100 shadow-sm">
+        <div className="bg-base-100 shadow-sm sticky top-0 z-50">
             <div className="navbar container mx-auto">
                 <div className="flex-1">
                     <Link to="/" className="font-semibold cursor-pointer text-xl">To Do</Link>
@@ -26,8 +25,8 @@ const Navbar = () => {
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full">
                                 <img
-                                    alt="Tailwind CSS Navbar component"
-                                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                    alt={user?.displayName}
+                                    src={user?.photoURL} />
                             </div>
                         </div>
                         <ul
