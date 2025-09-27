@@ -47,6 +47,35 @@ async function run() {
       const result = await todoCollection.deleteOne(query);
       res.send(result);
     })
+    // status-update
+    app.patch('/status-update/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: { status: "Complete" }
+      }
+      const result = await todoCollection.updateOne(query, updateDoc);
+      res.send(result);
+    })
+    // update todo 
+    app.patch('/update-todo/:id', async (req, res) => {
+      const id = req.params.id;
+      const todoData = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: todoData
+      }
+      const result = await todoCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+    // get a specific
+    app.get('/single-todo/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const result = await todoCollection.findOne(filter);
+      res.send(result);
+    })
 
 
     await client.db("admin").command({ ping: 1 });

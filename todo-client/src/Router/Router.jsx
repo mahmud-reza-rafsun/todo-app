@@ -6,6 +6,7 @@ import SignUp from "../Page/Authentication/SignUp/SignUp";
 import PrivetRoute from "./PrivetRoute";
 import AddTodo from "../Page/AddTodo/AddTodo";
 import MyTodo from "../Page/MyTodo/MyTodo";
+import TodoUpdates from "../Page/MyTodo/TodoUpdate";
 
 const router = createBrowserRouter([
     {
@@ -36,7 +37,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: '/my-todo',
-                        element: <MyTodo/>
+                        element: <MyTodo />
+                    },
+                    {
+                        path: '/update-todo/:id',
+                        element: <TodoUpdates />
                     }
                 ]
             }

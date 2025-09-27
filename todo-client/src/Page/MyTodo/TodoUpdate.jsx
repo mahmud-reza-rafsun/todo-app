@@ -1,32 +1,43 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import toast from "react-hot-toast";
-import axios from 'axios'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const AddTodo = () => {
+const TodoUpdate = () => {
     const navigate = useNavigate();
-    const handleAddTodo = async (e) => {
+    const { id } = useParams();
+    const handleUpdate = async (e) => {
         e.preventDefault();
         const form = e.target;
         const title = form.title.value;
         const time = form.time.value;
         const items = form.items.value;
         const description = form.description.value;
-        const formData = { title, time, items, description, status: "Pending" }
-        console.log(formData);
+        const updateData = { title, time, items, description }
+        console.log(updateData);
 
         // set data to database
         try {
-            await axios.post(`${import.meta.env.VITE_API}/add-todo`, formData);
-            toast.success('Todo add Successful!!!');
+            await axios.patch(`${import.meta.env.VITE_API}/update-todo/${id}`, updateData);
+            toast.success('Todo Update Successful!!!');
             navigate('/my-todo')
         } catch (error) {
             toast.error(error.message)
         }
     }
+    // get single todo info
+    const { data: todoData } = useQuery({
+        queryKey: ['todoData'],
+        queryFn: async () => {
+            const { data } = await axios.get(`${import.meta.env.VITE_API}/single-todo`)
+            return data;
+        }
+    });
+    console.log(todoData);
     return (
         <div className="p-8 w-11/12">
             <div className="rounded-box border border-base-content/5 bg-base-100 p-4">
-                <form onSubmit={handleAddTodo}>
+                <form onSubmit={handleUpdate}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
                         {/* title */}
                         <div className=''>
@@ -43,7 +54,6 @@ const AddTodo = () => {
                                 className='block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300'
                                 type='text'
                                 placeholder='Title'
-                                required
                             />
                         </div>
                         {/* time */}
@@ -84,16 +94,15 @@ const AddTodo = () => {
                     <div className="mt-5">
                         <button
                             type='submit'
-                            className='w-fit px-8 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-10 cursor-pointer'
+                            className='w-fit px-5 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-10 cursor-pointer'
                         >
-                            Add Todo
+                            Update Todo
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-
     );
 };
 
-export default AddTodo;
+export default TodoUpdate;
