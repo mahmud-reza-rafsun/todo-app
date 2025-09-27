@@ -1,6 +1,20 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+import { toast } from 'react-hot-toast'
 
 const Navbar = () => {
+    const { handleSignOut } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const handleLogOut = () => {
+        try {
+            handleSignOut();
+            toast.success('Log Out Successful!!');
+            navigate('/')
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
     return (
         <div className="bg-base-100 shadow-sm">
             <div className="navbar container mx-auto">
@@ -26,7 +40,9 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li><a>Settings</a></li>
-                            <li><a>Logout</a></li>
+                            <li className="py-1">
+                                <button onClick={handleLogOut} className="btn btn-xs shadow-none border-none text-white bg-red-500" >Log Out</button>
+                            </li>
                         </ul>
                     </div>
                 </div>
