@@ -10,13 +10,13 @@ const Sidebar = () => {
                     <li>
                         <NavLink to="add-todo" className="text-lg text-gray-800">
                             <IoBagAddOutline />
-                            <span className="text-[15px] font-medium mt-[4px]">Add Todo</span>
+                            <span className="text-[15px] font-medium hidden md:hidden lg:flex mt-[4px]">Add Todo</span>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to="my-todo" className="text-lg text-gray-800">
                             <IoBagAddOutline />
-                            <span className="text-[15px] font-medium mt-[4px]">My Todo</span>
+                            <span className="text-[15px] font-medium hidden md:hidden lg:flex mt-[4px]">My Todo</span>
                         </NavLink>
                     </li>
                 </div>

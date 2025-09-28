@@ -18,13 +18,14 @@ const AddTodo = () => {
         try {
             await axios.post(`${import.meta.env.VITE_API}/add-todo`, formData);
             toast.success('Todo add Successful!!!');
-            navigate('/my-todo')
+            navigate('/my-todo');
+            window.location.reload();
         } catch (error) {
             toast.error(error.message)
         }
     }
     return (
-        <div className="p-8 w-11/12">
+        <div className="p-3 md:p-8 w-[95%] md:w-full lg:w-11/12 container mx-auto">
             <div className="rounded-box border border-base-content/5 bg-base-100 p-4">
                 <form onSubmit={handleAddTodo}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">

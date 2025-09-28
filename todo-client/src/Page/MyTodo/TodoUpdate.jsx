@@ -29,11 +29,11 @@ const TodoUpdate = () => {
     const { data: todoData } = useQuery({
         queryKey: ['todoData'],
         queryFn: async () => {
-            const { data } = await axios.get(`${import.meta.env.VITE_API}/single-todo`)
+            const { data } = await axios.get(`${import.meta.env.VITE_API}/single-todo/${id}`)
             return data;
         }
     });
-    console.log(todoData);
+    // update form data
     return (
         <div className="p-8 w-11/12">
             <div className="rounded-box border border-base-content/5 bg-base-100 p-4">
@@ -54,6 +54,7 @@ const TodoUpdate = () => {
                                 className='block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300'
                                 type='text'
                                 placeholder='Title'
+                                defaultValue={todoData?.title}
                             />
                         </div>
                         {/* time */}
@@ -67,6 +68,7 @@ const TodoUpdate = () => {
                             <input
                                 name="time"
                                 type="time"
+                                defaultValue={todoData?.time}
                                 className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300"
                             />
                         </div>
@@ -78,7 +80,7 @@ const TodoUpdate = () => {
                             >
                                 Items
                             </label>
-                            <textarea name="items" className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Items"></textarea>
+                            <textarea defaultValue={todoData?.items} name="items" className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Items"></textarea>
                         </div>
                         {/* description */}
                         <div className=''>
@@ -88,7 +90,7 @@ const TodoUpdate = () => {
                             >
                                 Description
                             </label>
-                            <textarea name="description" className=" block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Description"></textarea>
+                            <textarea defaultValue={todoData?.description} name="description" className=" block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div className="mt-5">
