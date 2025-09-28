@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast'
 import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
-    const { handleSignOut, user } = useAuth();
+    const { handleSignOut } = useAuth();
     const navigate = useNavigate();
     const handleLogOut = () => {
         try {
@@ -25,8 +25,8 @@ const Navbar = () => {
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full">
                                 <img
-                                    alt={user?.displayName}
-                                    src={user?.photoURL} />
+                                    alt="Tailwind CSS Navbar component"
+                                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                             </div>
                         </div>
                         <ul

@@ -1,28 +1,54 @@
 import { useState } from "react";
 import bgImg from '../../../assets/images/image.jpg'
 import { GoEye, GoEyeClosed } from "react-icons/go";
-import { AuthContext } from "../../../provider/AuthProvider/AuthProvider";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
 const SignUp = () => {
-    const { handleGoogleSignIn } = useAuth();
+    const { handleGoogleSignIn, createUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const handleSignUp = (e) => {
-        e.preventDefault();
-    }
+
     const handleGoogle = async () => {
         try {
             await handleGoogleSignIn();
             toast.success('Google SignUp Successful!!!');
-            navigate('/')
+            navigate('/login')
         }
         catch (error) {
             toast.error(error.message);
         }
     }
+
+     const handleRegistration = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        // const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        // set password validation
+        if (!/[A-Z]/.test(password)) {
+            toast.error("Password must include at least one uppercase letter (A-Z)");
+            return
+        } else if (!/[a-z]/.test(password)) {
+            toast.error("Password must include at least one lowercase letter (a-z)");
+            return
+        } else if (password.length < 6) {
+            toast.error('Password must be 6 characters or longor')
+        } else {
+            // create users
+            try {
+                await createUser(email, password);
+                toast.success('Create User Successful!!!')
+                navigate('/login')
+            } catch (error) {
+                toast.error(error.message);
+            }
+        }
+    }
+
     return (
         <div className='flex justify-center items-center mt-24'>
             <div className='flex w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-4xl '>
@@ -74,9 +100,9 @@ const SignUp = () => {
                         <span className='w-1/5 border-b dark:border-gray-400 lg:w-1/4'></span>
                     </div>
 
-                    <form onSubmit={handleSignUp}>
+                    <form onSubmit={handleRegistration}>
                         {/* name */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 lg:gap-x-2">
+                        <div className="grid grid-cols-1 gap-0 lg:gap-x-2">
                             <div className='mt-4'>
                                 <label
                                     className='block mb-2 text-sm font-medium text-gray-600 '
@@ -91,16 +117,6 @@ const SignUp = () => {
                                     placeholder='Name'
                                     required
                                 />
-                            </div>
-                            {/* photo URL */}
-                            <div className='mt-4'>
-                                <label
-                                    className='block mb-2 text-sm font-medium text-gray-600 '
-                                    htmlFor='photo'
-                                >
-                                    Photo
-                                </label>
-                                <input type="file" name="image" className="file-input h-[43px] text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-10  focus:outline-none focus:ring focus:ring-blue-300" />
                             </div>
                         </div>
                         {/* email */}

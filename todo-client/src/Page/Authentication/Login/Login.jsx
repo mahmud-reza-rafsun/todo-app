@@ -5,9 +5,10 @@ import { useState } from "react";
 import { GoEyeClosed } from "react-icons/go";
 import useAuth from "../../../hooks/useAuth";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import toast from "react-hot-toast";
 
 const Login = () => {
-    const { handleGoogleSignIn, loading, user } = useAuth();
+    const { handleGoogleSignIn, loading, user, loginUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -15,13 +16,31 @@ const Login = () => {
     if (user) return <Navigate to={from} replace={true} />
     if (loading) return <LoadingSpinner />
 
-
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+        try {
+            await loginUser(email, password);
+            navigate(from, { replace: true })
+            toast.success('Login Successfull');
+            navigate('/');
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
-    const handleGoogle = () => {
-        handleGoogleSignIn();
-        navigate("/");
+
+    const handleGoogle = async () => {
+        try {
+            await handleGoogleSignIn();
+            toast.success('Google SignUp Successful!!!');
+            navigate('/')
+        }
+        catch (error) {
+            toast.error(error.message);
+        }
     }
 
     return (

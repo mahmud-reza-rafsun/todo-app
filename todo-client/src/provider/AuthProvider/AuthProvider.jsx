@@ -1,8 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useState } from "react";
 import {
+    createUserWithEmailAndPassword,
     GoogleAuthProvider,
     onAuthStateChanged,
+    signInWithEmailAndPassword,
     signInWithPopup,
     signOut
 }
@@ -25,11 +27,23 @@ const AuthProvider = ({ children }) => {
         setLoading(false)
         return signOut(auth);
     }
+    // create user with email
+    const createUser = (email, password) => {
+        setLoading(true);
+        return createUserWithEmailAndPassword(auth, email, password);
+    }
+    // login user with email
+    const loginUser = (email, password) => {
+        setLoading(true);
+        return signInWithEmailAndPassword(auth, email, password);
+    }
     const authInfo = {
         handleGoogleSignIn,
         handleSignOut,
         loading,
-        user
+        user,
+        createUser,
+        loginUser
     }
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
